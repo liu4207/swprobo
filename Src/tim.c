@@ -24,11 +24,11 @@
 
  void DWT_Init(void)
 {
-    if (!(DWT->CTRL & 1))  // Ê¹ÄÜ DWT ¼ÆÊýÆ÷
+    if (!(DWT->CTRL & 1))  // Ê¹ï¿½ï¿½ DWT ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
-        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk; // Ê¹ÄÜ×·×Ù×ÜÏß
-        DWT->CYCCNT = 0;    // ¼ÆÊýÆ÷ÇåÁã
-        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk; // Æô¶¯¼ÆÊýÆ÷
+        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk; // Ê¹ï¿½ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        DWT->CYCCNT = 0;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 }
 
@@ -118,7 +118,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
     __HAL_RCC_TIM3_CLK_ENABLE();
 
     /* TIM3 interrupt Init */
-    HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(TIM3_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(TIM3_IRQn);
   /* USER CODE BEGIN TIM3_MspInit 1 */
 

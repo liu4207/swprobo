@@ -76,12 +76,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BAT0_Pin */
-  GPIO_InitStruct.Pin = BAT0_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BAT0_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pins : BMQ_R1_Pin IRHIT_L_Pin IR_CC_L1_Pin IR_BT_F_Pin
                            IR_BT_L_Pin */
   GPIO_InitStruct.Pin = BMQ_R1_Pin|IRHIT_L_Pin|IR_CC_L1_Pin|IR_BT_F_Pin

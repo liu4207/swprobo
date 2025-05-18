@@ -65,8 +65,6 @@ void Error_Handler(void);
 #define FAN_FB_GPIO_Port GPIOE
 #define MAGNET_Pin GPIO_PIN_5
 #define MAGNET_GPIO_Port GPIOE
-#define BAT0_Pin GPIO_PIN_4
-#define BAT0_GPIO_Port GPIOC
 #define BMQ_R1_Pin GPIO_PIN_0
 #define BMQ_R1_GPIO_Port GPIOB
 #define RB_I_Pin GPIO_PIN_9

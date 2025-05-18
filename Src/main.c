@@ -18,6 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
+#include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -30,12 +33,19 @@
 #include "motor_control.h"
 #include "fan_control.h"
 #include "imu.h"
-#include <stdio.h>  // Ìí¼Óstdio.hÍ·ÎÄ¼þÒÔÊ¹ÓÃprintfº¯Êý
+#include "cmsis_os.h"
+#include <stdio.h>  //printf
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+//osMessageQId uart2_tx_queue;
+//#define UART_TX_BUF_LEN 128
+//#define UART_QUEUE_LEN 10
+//osMessageQId uartQueueHandle;
+//QueueHandle_t uartQueueHandle;
+//uint8_t uart_tx_buf_pool[UART_QUEUE_LEN][UART_TX_BUF_LEN];
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -56,6 +66,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 int fputc(int ch, FILE *f)
 {
@@ -98,72 +109,77 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-		MX_GPIO_Init();
-    printf("GPIO ³õÊ¼»¯Íê³É\n");
-    MX_TIM3_Init();
-    printf("TIM3 ³õÊ¼»¯Íê³É\n");
-    MX_UART4_Init();
-    printf("UART4 ³õÊ¼»¯Íê³É\n");
-    MX_USART1_UART_Init();
-    printf("USART1 ³õÊ¼»¯Íê³É\n");
-    MX_USART2_UART_Init();
-    printf("USART2 ³õÊ¼»¯Íê³É\n");
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_TIM3_Init();
+  MX_UART4_Init();
+  MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-	atk_ms601m_uart_init();  // ³õÊ¼»¯ FIFO ºÍÊ¹ÄÜÖÐ¶Ï
-	Motor_Init();  // ³õÊ¼»¯µç»ú
-	  Left_Brush_Init();
-  Right_Brush_Init();
-  Pump_Init();
-	Fan_Init();
-	printf("ÍâÉè³õÊ¼»¯Íê³É\n");
+//	atk_ms601m_uart_init();  
+	//Motor_Init();  // 
+//	  Left_Brush_Init();
+//  Right_Brush_Init();
+//  Pump_Init();
+//	Fan_Init();
+	printf("init complete\n");
 //	IMU_Init(&huart1);
 	
-	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);//¿ªÆôÖÐ¶Ï
-HAL_GPIO_WritePin(user_led_GPIO_Port, user_led_Pin, GPIO_PIN_SET); // µãÁÁLEDÖ¸Ê¾³ÌÐòÔËÐÐ
+	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+HAL_GPIO_WritePin(user_led_GPIO_Port, user_led_Pin, GPIO_PIN_SET); 
   /* USER CODE END 2 */
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-		int counter = 0; // ÓÃÓÚ´òÓ¡µÄ¼ÆÊýÆ÷
+		int counter = 0; // 
 //		IMU_Data_t imu_data = {0};
-		 demo_run(); 
+
   while (1)
   {
 //		IMU_Process();
 //		IMU_GetData(&imu_data);
-//		printf("×ËÌ¬½Ç: ¸©Ñö=%.2f¡ã, ºá¹ö=%.2f¡ã, Æ«º½=%.2f¡ã\n",
-//               imu_data.pitch, imu_data.roll, imu_data.yaw);
-//		
-		 Turn_On_Left_Brush();
-    Turn_On_Right_Brush();
+
+//	
+		demo_run(); 
+//		 Turn_On_Left_Brush();
+//    Turn_On_Right_Brush();
 //		 Turn_On_Pump();
 //		Fan_TurnOff();
 		Motor_SoftStart(100,2000);
 		
 		Motor_Forward();
-    HAL_Delay(2000);
-		 Motor_Brake();
-		    HAL_Delay(2000);
+ //   HAL_Delay(2000);
+		 //Motor_Brake();
+		 //   HAL_Delay(2000);
 		
-		printf("Number: %d\n", counter++); // ´òÓ¡µÝÔöµÄÊý×Ö
-    HAL_Delay(1000); // Ã¿Ãë´òÓ¡Ò»´Î
-		HAL_GPIO_TogglePin(user_led_GPIO_Port, user_led_Pin); // ·­×ªLED
-//		 Motor_Forward();  // µç»úÕý×ª
-//     Motor_SetSpeed(50);  // ÉèÖÃµç»úËÙ¶ÈÎª50%
-//     HAL_Delay(2000);  // ÔËÐÐ2Ãë
+		printf("Number: %d\n", counter++); // ï¿½ï¿½ï¿½ï¿½
+    HAL_Delay(1000); //
+		HAL_GPIO_TogglePin(user_led_GPIO_Port, user_led_Pin); // LED
+//		 Motor_Forward();  // 
+//     Motor_SetSpeed(50);  //
+//     HAL_Delay(2000);  // 
 //    Fan_TurnOn();
 //		HAL_Delay(800);
 		
 
-//     Motor_Stop();  // Í£Ö¹µç»ú
-//     HAL_Delay(1000);  // Í£¶Ù1Ãë
+//     Motor_Stop();  // Í£Ö¹ï¿½ï¿½ï¿½
+//     HAL_Delay(1000);  // Í£ï¿½ï¿½1ï¿½ï¿½
 
-//     Motor_Backward();  // µç»ú·´×ª
-//     Motor_SetSpeed(30);  // ÉèÖÃµç»úËÙ¶ÈÎª30%
-//     HAL_Delay(2000);  // ÔËÐÐ2Ãë
+//     Motor_Backward();  // ï¿½ï¿½ï¿½ï¿½ï¿½×ª
+//     Motor_SetSpeed(30);  // ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ù¶ï¿½Îª30%
+//     HAL_Delay(2000);  // ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½
 
-//     Motor_Stop();  // Í£Ö¹µç»ú
-//     HAL_Delay(1000);  // Í£¶Ù1Ãë
+//     Motor_Stop();  // Í£Ö¹ï¿½ï¿½ï¿½
+//     HAL_Delay(1000);  // Í£ï¿½ï¿½1ï¿½ï¿½
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -222,6 +238,27 @@ void SystemClock_Config(void)
 /* USER CODE END 4 */
 
 /**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
+
+/**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
@@ -230,11 +267,11 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
-	printf("´íÎó: ÏµÍ³·¢Éú´íÎó£¬½øÈëËÀÑ­»·\n");
+	printf("ï¿½ï¿½ï¿½ï¿½: ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½\n");
   while (1)
   {
 		HAL_GPIO_TogglePin(user_led_GPIO_Port, user_led_Pin);
-        HAL_Delay(500); /* ´íÎóÊ± LED ÉÁË¸ */
+        HAL_Delay(500); /* ï¿½ï¿½ï¿½ï¿½Ê± LED ï¿½ï¿½Ë¸ */
   }
   /* USER CODE END Error_Handler_Debug */
 }

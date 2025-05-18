@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    usart.h
+  * @file    dma.h
   * @brief   This file contains all the function prototypes for
-  *          the usart.c file
+  *          the dma.c file
   ******************************************************************************
   * @attention
   *
@@ -18,8 +18,8 @@
   */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USART_H__
-#define __USART_H__
+#ifndef __DMA_H__
+#define __DMA_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,39 +28,25 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+/* DMA memory to memory transfer handles -------------------------------------*/
+
 /* USER CODE BEGIN Includes */
-extern uint8_t rx_byte;
-#include <stdarg.h>   // 支持可变参数处理 va_list 等
-#include <stdio.h>    // 支持 vsnprintf
-#include <string.h>   // 支持 strlen
-	#define UART2_TX_QUEUE_LEN 10
-#define UART2_TX_BUF_SIZE  128
-	typedef struct {
-    char data[UART2_TX_BUF_SIZE];
-} uart2_msg_t;
+
 /* USER CODE END Includes */
 
-extern UART_HandleTypeDef huart4;
-
-extern UART_HandleTypeDef huart1;
-
-extern UART_HandleTypeDef huart2;
-
 /* USER CODE BEGIN Private defines */
-void uart2_dma_send(const char *buf, uint16_t len);
+
 /* USER CODE END Private defines */
 
-void MX_UART4_Init(void);
-void MX_USART1_UART_Init(void);
-void MX_USART2_UART_Init(void);
+void MX_DMA_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void uart2_printf(const char *fmt, ...);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __USART_H__ */
+#endif /* __DMA_H__ */
 
