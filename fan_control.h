@@ -12,4 +12,6 @@ void Fan_Init(void);
 void Fan_TurnOn(void);
 void Fan_TurnOff(void);
 
+void Fan_Task(void const * argument);
+
 #endif // 添加此句，使预编译指令完整

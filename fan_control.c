@@ -1,4 +1,5 @@
 #include "fan_control.h"
+#include "cmsis_os.h"
 
 // 初始化风扇控制引脚
 void Fan_Init(void)
@@ -30,4 +31,21 @@ void Fan_TurnOn(void)
 void Fan_TurnOff(void)
 {
     HAL_GPIO_WritePin(FAN_CONTROL_GPIO_PORT, FAN_CONTROL_PIN, GPIO_PIN_RESET);
+}
+
+void Fan_Task(void const * argument)
+{
+  /* USER CODE BEGIN Fan_Task */
+		Fan_Init();
+  /* Infinite loop */
+  for(;;)
+  {
+		Fan_TurnOn();
+		osDelay(2000);
+		Fan_TurnOff();
+		osDelay(2000);
+		
+    osDelay(1);
+  }
+  /* USER CODE END Fan_Task */
 }

@@ -26,4 +26,8 @@ void Turn_Off_Right_Brush(void);
 void Turn_On_Pump(void);
 void Turn_Off_Pump(void);
 
+void Brush_Task(void const * argument);
+void Pump_Task(void const * argument);
+
+
 #endif

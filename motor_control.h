@@ -27,6 +27,6 @@ void Motor_Backward(void);
 void Motor_Stop(void);
 void Motor_SoftStart(uint8_t target_speed, uint16_t duration);
 void Motor_Brake(void);
-
-
+void Motor_TurnLeft(void);
+void Motor_TurnRight(void);
 #endif

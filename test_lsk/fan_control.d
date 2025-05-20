@@ -24,6 +24,9 @@ test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
+test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
+test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
@@ -32,3 +35,17 @@ test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 test_lsk\fan_control.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+test_lsk\fan_control.o: ../Inc/FreeRTOSConfig.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+test_lsk\fan_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h

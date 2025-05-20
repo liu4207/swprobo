@@ -1,5 +1,7 @@
 #include "device_control.h"
 #include "stm32f4xx_hal_gpio.h"
+#include "cmsis_os.h"      // for osDelay, osMessageCreate, osMessageQDef
+
 // 初始化左侧刷子控制引脚
 void Left_Brush_Init(void)
 {
@@ -92,4 +94,43 @@ void Turn_On_Pump(void)
 void Turn_Off_Pump(void)
 {
     HAL_GPIO_WritePin(PUMP_CONTROL_GPIO_PORT, PUMP_CONTROL_PIN, GPIO_PIN_RESET);
+
 }
+
+
+void Brush_Task(void const * argument)
+{
+  /* USER CODE BEGIN Brush_Task */
+	 Left_Brush_Init();
+  Right_Brush_Init();
+
+  /* Infinite loop */
+  for(;;)
+  {
+		Turn_On_Left_Brush();
+    Turn_On_Right_Brush();
+		osDelay(2000);              // 保持运行2秒
+		Turn_Off_Right_Brush();
+		Turn_Off_Left_Brush();
+		
+		osDelay(2000);              // 保持运行2秒
+
+    osDelay(1);
+  }
+  /* USER CODE END Brush_Task */
+}
+
+void Pump_Task(void const * argument)
+{
+  /* USER CODE BEGIN Pump_Task */
+	  Pump_Init();
+  /* Infinite loop */
+  for(;;)
+  {
+		
+    osDelay(1);
+  }
+  /* USER CODE END Pump_Task */
+}
+
+

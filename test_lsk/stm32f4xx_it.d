@@ -23,6 +23,9 @@ test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
+test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
+test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
@@ -32,3 +35,10 @@ test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 test_lsk\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 test_lsk\stm32f4xx_it.o: ../Inc/stm32f4xx_it.h
+test_lsk\stm32f4xx_it.o: ../Inc/usart.h
+test_lsk\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+test_lsk\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+test_lsk\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+test_lsk\stm32f4xx_it.o: ../MDK-ARM/atk_ms601m_uart.h
+test_lsk\stm32f4xx_it.o: ../MDK-ARM/sys.h
+test_lsk\stm32f4xx_it.o: ../Drivers/CMSIS/Include/core_cm4.h
