@@ -30,17 +30,19 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 extern uint8_t rx_byte;
-#include <stdarg.h>   // Ö§³Ö¿É±ä²ÎÊý´¦Àí va_list µÈ
-#include <stdio.h>    // Ö§³Ö vsnprintf
-#include <string.h>   // Ö§³Ö strlen
+#include <stdarg.h>   // Ö§ï¿½Ö¿É±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ va_list ï¿½ï¿½
+#include <stdio.h>    // Ö§ï¿½ï¿½ vsnprintf
+#include <string.h>   // Ö§ï¿½ï¿½ strlen
 	#define UART2_TX_QUEUE_LEN 10
 #define UART2_TX_BUF_SIZE  128
 	typedef struct {
     char data[UART2_TX_BUF_SIZE];
 } uart2_msg_t;
-/* USER CODE END Includes */
+	
+#define UART2_RX_BUFFER_SIZE 256
+extern uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];
 
-extern UART_HandleTypeDef huart4;
+/* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart1;
 
@@ -48,9 +50,11 @@ extern UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN Private defines */
 void uart2_dma_send(const char *buf, uint16_t len);
+void USART2_UART_StartDMA(void);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ main.c ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+void uart2_rx_callback(uint8_t *data, uint16_t len);  // ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
+
 /* USER CODE END Private defines */
 
-void MX_UART4_Init(void);
 void MX_USART1_UART_Init(void);
 void MX_USART2_UART_Init(void);
 

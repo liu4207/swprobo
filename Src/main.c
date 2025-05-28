@@ -35,6 +35,7 @@
 #include "imu.h"
 #include "cmsis_os.h"
 #include <stdio.h>  //printf
+#include "tim_callback.h"
 
 /* USER CODE END Includes */
 
@@ -61,7 +62,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+/* USER CODE BEGIN PV */
+volatile uint32_t last_capture_ch1 = 0;
+volatile uint32_t pulse_interval_ch1 = 0;
+volatile float motor_speed_rps_ch1 = 0.0f;
 
+volatile uint32_t last_capture_ch2 = 0;
+volatile uint32_t pulse_interval_ch2 = 0;
+volatile float motor_speed_rps_ch2 = 0.0f;
+                  // 替换为你编码器实际脉冲数
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -112,10 +121,10 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_TIM3_Init();
-  MX_UART4_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 //	atk_ms601m_uart_init();  
 	//Motor_Init();  // 
@@ -128,6 +137,11 @@ int main(void)
 	
 	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
 HAL_GPIO_WritePin(user_led_GPIO_Port, user_led_Pin, GPIO_PIN_SET); 
+
+USART2_UART_StartDMA();  // ����DMA����
+// 启动输入捕获中断
+    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);//左侧
+		HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);//右侧
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
@@ -154,9 +168,7 @@ HAL_GPIO_WritePin(user_led_GPIO_Port, user_led_Pin, GPIO_PIN_SET);
 //    Turn_On_Right_Brush();
 //		 Turn_On_Pump();
 //		Fan_TurnOff();
-		Motor_SoftStart(100,2000);
-		
-		Motor_Forward();
+
  //   HAL_Delay(2000);
 		 //Motor_Brake();
 		 //   HAL_Delay(2000);
@@ -267,7 +279,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
-	printf("����: ϵͳ�������󣬽�����ѭ��\n");
+	printf("error");
   while (1)
   {
 		HAL_GPIO_TogglePin(user_led_GPIO_Port, user_led_Pin);

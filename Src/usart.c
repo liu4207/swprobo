@@ -26,13 +26,12 @@
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 extern osMessageQId uart2_tx_queue;
-// ·¢ËÍÍê³É±êÖ¾£¨ÈÎÎñÄÚÓÃ£©
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É±ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
 volatile uint8_t tx_complete_flag = 0;
 
-
+uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // Ö»ï¿½Ú´Ë´ï¿½ï¿½ï¿½ï¿½ï¿½
 /* USER CODE END 0 */
 
-UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 DMA_HandleTypeDef hdma_usart1_rx;
@@ -40,34 +39,6 @@ DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 
-/* UART4 init function */
-void MX_UART4_Init(void)
-{
-
-  /* USER CODE BEGIN UART4_Init 0 */
-
-  /* USER CODE END UART4_Init 0 */
-
-  /* USER CODE BEGIN UART4_Init 1 */
-
-  /* USER CODE END UART4_Init 1 */
-  huart4.Instance = UART4;
-  huart4.Init.BaudRate = 115200;
-  huart4.Init.WordLength = UART_WORDLENGTH_8B;
-  huart4.Init.StopBits = UART_STOPBITS_1;
-  huart4.Init.Parity = UART_PARITY_NONE;
-  huart4.Init.Mode = UART_MODE_TX_RX;
-  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN UART4_Init 2 */
-
-  /* USER CODE END UART4_Init 2 */
-
-}
 /* USART1 init function */
 
 void MX_USART1_UART_Init(void)
@@ -131,31 +102,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(uartHandle->Instance==UART4)
-  {
-  /* USER CODE BEGIN UART4_MspInit 0 */
-
-  /* USER CODE END UART4_MspInit 0 */
-    /* UART4 clock enable */
-    __HAL_RCC_UART4_CLK_ENABLE();
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**UART4 GPIO Configuration
-    PA0-WKUP     ------> UART4_TX
-    PA1     ------> UART4_RX
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN UART4_MspInit 1 */
-
-  /* USER CODE END UART4_MspInit 1 */
-  }
-  else if(uartHandle->Instance==USART1)
+  if(uartHandle->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspInit 0 */
 
@@ -288,25 +235,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 {
 
-  if(uartHandle->Instance==UART4)
-  {
-  /* USER CODE BEGIN UART4_MspDeInit 0 */
-
-  /* USER CODE END UART4_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_UART4_CLK_DISABLE();
-
-    /**UART4 GPIO Configuration
-    PA0-WKUP     ------> UART4_TX
-    PA1     ------> UART4_RX
-    */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0|GPIO_PIN_1);
-
-  /* USER CODE BEGIN UART4_MspDeInit 1 */
-
-  /* USER CODE END UART4_MspDeInit 1 */
-  }
-  else if(uartHandle->Instance==USART1)
+  if(uartHandle->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspDeInit 0 */
 
@@ -366,55 +295,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
-//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-//{
-//    if (huart->Instance == USART2)
-//    {
-//        tx_complete_flag = 1;
-//    }
-//}
-
-
-
-
-//// ´®¿Ú´òÓ¡º¯Êý£¬·ÅÈëÏûÏ¢¶ÓÁÐ
-//void uart2_printf(const char *fmt, ...)
-//{
-//    uart2_msg_t msg;
-//    va_list args;
-//    va_start(args, fmt);
-//    vsnprintf(msg.data, sizeof(msg.data), fmt, args);
-//    va_end(args);
-
-//    osMessageQueuePut(uart2_tx_queue, &msg, 0, 10);  // µÈ´ý10ms
-//}
-
-//// ·¢ËÍÈÎÎñ
-//void uart2_tx_task(void *argument)
-//{
-//    uart2_msg_t msg;
-//    HAL_StatusTypeDef status;
-
-//    for (;;)
-//    {
-//        if (osMessageQueueGet(uart2_tx_queue, &msg, NULL, osWaitForever) == osOK)
-//        {
-//            tx_complete_flag = 0;
-//            status = HAL_UART_Transmit_DMA(&huart2, (uint8_t *)msg.data, strlen(msg.data));
-//            if (status == HAL_OK)
-//            {
-//                while (tx_complete_flag == 0)
-//                {
-//                    osDelay(1);
-//                }
-//            }
-//        }
-//    }
-//}
-/* DMA·¢ËÍÊ¾·¶º¯Êý */
+/* DMAï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 void uart2_dma_send(const char *buf, uint16_t len)
 {
-    // Ê¹ÓÃHAL¿â·Ç×èÈûDMA·¢ËÍ
+    // Ê¹ï¿½ï¿½HALï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DMAï¿½ï¿½ï¿½ï¿½
     HAL_UART_Transmit_DMA(&huart2, (uint8_t *)buf, len);
+}
+void USART2_UART_StartDMA(void)
+{
+    HAL_UART_Receive_DMA(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
+    __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 }
 /* USER CODE END 1 */

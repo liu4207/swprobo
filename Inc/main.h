@@ -108,6 +108,15 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
+extern volatile uint32_t last_capture_ch1;
+extern volatile uint32_t pulse_interval_ch1;
+extern volatile float motor_speed_rps_ch1;
+
+extern volatile uint32_t last_capture_ch2;
+extern volatile uint32_t pulse_interval_ch2;
+extern volatile float motor_speed_rps_ch2;
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

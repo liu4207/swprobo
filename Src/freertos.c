@@ -49,7 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 //osThreadId UARTSendHandle;
-// ÉùÃ÷ÏûÏ¢¶ÓÁÐ¾ä±ú£¨extern£©
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½ï¿½ï¿½externï¿½ï¿½
 osMessageQId uart2_tx_queue;
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
@@ -118,7 +118,7 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
- /* --- ´´½¨ÏûÏ¢¶ÓÁÐ --- */
+ /* --- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ --- */
   osMessageQDef(uart2_tx_queue_def, UART2_QUEUE_LEN, uint32_t);
   uart2_tx_queue = osMessageCreate(osMessageQ(uart2_tx_queue_def), NULL);
   /* add queues, ... */
@@ -199,11 +199,11 @@ void StartDefaultTask(void const * argument)
 //void Motor_Task(void const * argument)
 //{
 //  /* USER CODE BEGIN Motor_Task */
-////  /* Infinite loop */
-////  for(;;)
-////  {
-////    osDelay(1);
-////  }
+////////  /* Infinite loop */
+////////  for(;;)
+////////  {
+////////    osDelay(1);
+////////  }
 //  /* USER CODE END Motor_Task */
 //}
 
@@ -217,11 +217,11 @@ void StartDefaultTask(void const * argument)
 //void IMU_Task(void const * argument)
 //{
 //  /* USER CODE BEGIN IMU_Task */
-////  /* Infinite loop */
-////  for(;;)
-////  {
-////    osDelay(1);
-////  }
+////////  /* Infinite loop */
+////////  for(;;)
+////////  {
+////////    osDelay(1);
+////////  }
 //  /* USER CODE END IMU_Task */
 //}
 
@@ -235,11 +235,11 @@ void StartDefaultTask(void const * argument)
 //void Brush_Task(void const * argument)
 //{
 //  /* USER CODE BEGIN Brush_Task */
-////  /* Infinite loop */
-////  for(;;)
-////  {
-////    osDelay(1);
-////  }
+////////  /* Infinite loop */
+////////  for(;;)
+////////  {
+////////    osDelay(1);
+////////  }
 //  /* USER CODE END Brush_Task */
 //}
 
@@ -249,15 +249,15 @@ void StartDefaultTask(void const * argument)
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Pump_Task */
+///* USER CODE END Header_Pump_Task */
 //void Pump_Task(void const * argument)
 //{
 //  /* USER CODE BEGIN Pump_Task */
-////  /* Infinite loop */
-////  for(;;)
-////  {
-////    osDelay(1);
-////  }
+////////  /* Infinite loop */
+////////  for(;;)
+////////  {
+////////    osDelay(1);
+////////  }
 //  /* USER CODE END Pump_Task */
 //}
 
@@ -268,15 +268,15 @@ void StartDefaultTask(void const * argument)
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Fan_Task */
+///* USER CODE END Header_Fan_Task */
 //void Fan_Task(void const * argument)
 //{
 //  /* USER CODE BEGIN Fan_Task */
-////  /* Infinite loop */
-////  for(;;)
-////  {
-////    osDelay(1);
-////  }
+////////  /* Infinite loop */
+////////  for(;;)
+////////  {
+////////    osDelay(1);
+////////  }
 //  /* USER CODE END Fan_Task */
 //}
 
@@ -305,16 +305,16 @@ void Crash_Task(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_Battery_Task */
-void Battery_Task(void const * argument)
-{
-  /* USER CODE BEGIN Battery_Task */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END Battery_Task */
-}
+//void Battery_Task(void const * argument)
+//{
+//  /* USER CODE BEGIN Battery_Task */
+//////  /* Infinite loop */
+//////  for(;;)
+//////  {
+//////    osDelay(1);
+//////  }
+//  /* USER CODE END Battery_Task */
+//}
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
