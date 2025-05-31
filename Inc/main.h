@@ -115,8 +115,13 @@ extern volatile float motor_speed_rps_ch1;
 extern volatile uint32_t last_capture_ch2;
 extern volatile uint32_t pulse_interval_ch2;
 extern volatile float motor_speed_rps_ch2;
-
-
+#define WHEEL_CIRCUMFERENCE 0.225f   // 轮子周长，米
+#define ENCODER_PPR 620
+extern float distance_per_pulse;
+extern float left_distance ;
+extern float right_distance ;
+extern float linear_velocity;
+extern float angular_velocity_z;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -34,7 +34,7 @@ extern uint8_t rx_byte;
 #include <stdio.h>    // ֧�� vsnprintf
 #include <string.h>   // ֧�� strlen
 	#define UART2_TX_QUEUE_LEN 10
-#define UART2_TX_BUF_SIZE  128
+#define UART2_TX_BUF_SIZE  250
 	typedef struct {
     char data[UART2_TX_BUF_SIZE];
 } uart2_msg_t;

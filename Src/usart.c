@@ -22,7 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "atk_ms601m_uart.h"
-#define UART2_TX_BUF_SIZE 128
+#define UART2_TX_BUF_SIZE 250
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 extern osMessageQId uart2_tx_queue;
