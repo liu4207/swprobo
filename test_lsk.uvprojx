@@ -983,6 +983,26 @@
               <FileType>5</FileType>
               <FilePath>.\uart_send.h</FilePath>
             </File>
+            <File>
+              <FileName>tim_callback.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\tim_callback.h</FilePath>
+            </File>
+            <File>
+              <FileName>tim_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\tim_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>pid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\pid.h</FilePath>
+            </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pid.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

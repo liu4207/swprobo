@@ -1,5 +1,5 @@
 #include "imu.h"
-
+#include "main.h"
 #include "cmsis_os.h"      // for osDelay, osMessageCreate, osMessageQDef
 #include <stdio.h>  //printf
 /**
@@ -40,8 +40,11 @@ static void demo_key0_fun(void)
     atk_ms601m_attitude_data_t attitude_dat;           /* 姿态角数据 */
     atk_ms601m_gyro_data_t gyro_dat;                   /* 陀螺仪数据 */
     atk_ms601m_accelerometer_data_t accelerometer_dat; /* 加速度计数据 */
+	  atk_ms601m_quaternion_data_t quaternion_dat;       /* 四元数数据 */
     
     /* 获取ATK-MS901数据 */
+		atk_ms601m_get_quaternion(&quaternion_dat, 100);
+
     atk_ms601m_get_attitude(&attitude_dat, 100);                            /* 获取姿态角数据 */
     atk_ms601m_get_gyro_accelerometer(&gyro_dat, &accelerometer_dat, 100);  /* 获取陀螺仪、加速度计数据 */
     
@@ -53,12 +56,14 @@ static void demo_key0_fun(void)
     IMU_EstimateWheelSpeed(imu_data, &v_left, &v_right);
 	
 	int len = snprintf(imu_print_buf, sizeof(imu_print_buf),//静态分配
-        "Roll: %.02f Pitch: %.02f Yaw: %.02f \r\n"
+        "Quaternion: q0=%.4f q1=%.4f q2=%.4f q3=%.4f\r\n"
         "Gx: %.02f Gy: %.02f Gz: %.02f \r\n"
-        "Ax: %.02fG Ay: %.02fG Az: %.02fG\r\n",
-        attitude_dat.roll, attitude_dat.pitch, attitude_dat.yaw,
+        "Ax: %.02fG Ay: %.02fG Az: %.02fG\r\n"
+				"LeftDist: %.4f RightDist: %.4f LinVel: %.4f AngVel: %.4f\r\n",
+        quaternion_dat.q0, quaternion_dat.q1, quaternion_dat.q2, quaternion_dat.q3,
         gyro_dat.x, gyro_dat.y, gyro_dat.z,
-        accelerometer_dat.x, accelerometer_dat.y, accelerometer_dat.z);
+        accelerometer_dat.x, accelerometer_dat.y, accelerometer_dat.z,
+				left_distance, right_distance, linear_velocity, angular_velocity_z);
 
     // 发送字符串指针到队列（指向全局缓冲区）
     osMessagePut(uart2_tx_queue, (uint32_t)imu_print_buf, 0);//到这里

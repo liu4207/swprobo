@@ -21,7 +21,7 @@ extern TIM_HandleTypeDef htim3;
 
 // º¯ÊýÉùÃ÷
 void Motor_Init(void);
-void Motor_SetSpeed(uint8_t speed);
+void Motor_SetSpeed(uint8_t speed1,uint8_t speed2);
 void Motor_Forward(void);
 void Motor_Backward(void);
 void Motor_Stop(void);
@@ -29,4 +29,7 @@ void Motor_SoftStart(uint8_t target_speed, uint16_t duration);
 void Motor_Brake(void);
 void Motor_TurnLeft(void);
 void Motor_TurnRight(void);
+void Motor_Right_SetDirection(int right_dir);
+void Motor_Left_SetDirection(int left_dir);
+
 #endif

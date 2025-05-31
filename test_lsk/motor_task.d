@@ -54,3 +54,7 @@ test_lsk\motor_task.o: ../Inc/usart.h
 test_lsk\motor_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 test_lsk\motor_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 test_lsk\motor_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+test_lsk\motor_task.o: pid.h
+test_lsk\motor_task.o: tim_callback.h
+test_lsk\motor_task.o: ../Inc/tim.h
+test_lsk\motor_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

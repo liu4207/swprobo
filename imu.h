@@ -9,7 +9,7 @@
 
 
 #define UART2_QUEUE_LEN 10
-#define UART2_TX_BUF_SIZE 128
+#define UART2_TX_BUF_SIZE 250
 void demo_run(void);
 void IMU_Task(void const * argument);
 

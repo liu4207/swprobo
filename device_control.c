@@ -107,8 +107,8 @@ void Brush_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-		Turn_On_Left_Brush();
-    Turn_On_Right_Brush();
+//		Turn_On_Left_Brush();
+//    Turn_On_Right_Brush();
 		osDelay(2000);              // 保持运行2秒
 		Turn_Off_Right_Brush();
 		Turn_Off_Left_Brush();
