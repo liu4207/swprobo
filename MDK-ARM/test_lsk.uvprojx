@@ -1003,6 +1003,11 @@
               <FileType>1</FileType>
               <FilePath>.\pid.c</FilePath>
             </File>
+            <File>
+              <FileName>crash_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\crash_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

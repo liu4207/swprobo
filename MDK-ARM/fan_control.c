@@ -1,5 +1,7 @@
 #include "fan_control.h"
 #include "cmsis_os.h"
+// fan_control.c 顶部
+volatile uint8_t fan_enabled = 0;
 
 // 初始化风扇控制引脚
 void Fan_Init(void)
@@ -40,12 +42,12 @@ void Fan_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-		Fan_TurnOn();
-		osDelay(2000);
-		Fan_TurnOff();
-		osDelay(2000);
+     if (fan_enabled)
+         Fan_TurnOn();
+     else
+         Fan_TurnOff();
 		
-    osDelay(1);
+    osDelay(100);
   }
   /* USER CODE END Fan_Task */
 }

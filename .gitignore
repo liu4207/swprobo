@@ -1,0 +1,6 @@
+ls-files MDK-ARM/.uvprojx
+ls-files MDK-ARM/.uvoptx
+ls-files MDK-ARM/.c
+ls-files MDK-ARM/.h
+ls-files MDK-ARM/.s
+ls-files MDK-ARM/.lst

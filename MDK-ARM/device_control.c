@@ -1,6 +1,9 @@
 #include "device_control.h"
 #include "stm32f4xx_hal_gpio.h"
 #include "cmsis_os.h"      // for osDelay, osMessageCreate, osMessageQDef
+// device_control.c 顶部
+volatile uint8_t brush_enabled = 0;
+volatile uint8_t pump_enabled = 0;
 
 // 初始化左侧刷子控制引脚
 void Left_Brush_Init(void)
@@ -107,15 +110,17 @@ void Brush_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-//		Turn_On_Left_Brush();
-//    Turn_On_Right_Brush();
-		osDelay(2000);              // 保持运行2秒
+		if (brush_enabled)
+	{
+		Turn_On_Left_Brush();
+    Turn_On_Right_Brush();
+	}else{		// 保持运行2秒
 		Turn_Off_Right_Brush();
 		Turn_Off_Left_Brush();
-		
-		osDelay(2000);              // 保持运行2秒
+	}
+		//osDelay(2000);              // 保持运行2秒
 
-    osDelay(1);
+    osDelay(100);
   }
   /* USER CODE END Brush_Task */
 }
@@ -127,8 +132,11 @@ void Pump_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-		
-    osDelay(1);
+		    if (pump_enabled)
+            Turn_On_Pump();
+        else
+            Turn_Off_Pump();
+    osDelay(100);
   }
   /* USER CODE END Pump_Task */
 }

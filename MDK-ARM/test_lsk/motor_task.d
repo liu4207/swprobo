@@ -58,3 +58,5 @@ test_lsk\motor_task.o: pid.h
 test_lsk\motor_task.o: tim_callback.h
 test_lsk\motor_task.o: ../Inc/tim.h
 test_lsk\motor_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+test_lsk\motor_task.o: device_control.h
+test_lsk\motor_task.o: fan_control.h

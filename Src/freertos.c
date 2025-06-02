@@ -287,16 +287,16 @@ void StartDefaultTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_Crash_Task */
-void Crash_Task(void const * argument)
-{
-  /* USER CODE BEGIN Crash_Task */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END Crash_Task */
-}
+//void Crash_Task(void const * argument)
+//{
+//  /* USER CODE BEGIN Crash_Task */
+//  /* Infinite loop */
+//  for(;;)
+//  {
+//    osDelay(1);
+//  }
+//  /* USER CODE END Crash_Task */
+//}
 
 /* USER CODE BEGIN Header_Battery_Task */
 /**

@@ -7,13 +7,16 @@
 #include "main.h"
 #include "tim.h"
 #include <math.h>
-
+#include "device_control.h"
+#include "fan_control.h"
 
 #define WHEEL_BASE 0.185f            // 轮距，米（左右轮中心距离）
 #define CONTROL_PERIOD_MS    100
 #define SPEED_PULSE_INTERVAL_MAX 2000000
 #define PWM_DEADBAND 20  // PWM最低有效门槛，低于此值电机不转
 #define SPEED_STOP_THRESHOLD 0.01f  // 速度低于该值认为停止
+volatile int control_mode = 1;  // 1: 自动模式；0: 手动模式
+
 volatile int32_t encoder_left_pulse_count = 0;
 volatile int32_t encoder_right_pulse_count = 0;
 volatile uint32_t pulse_count1 = 0;  // 左计数脉冲总数
@@ -53,23 +56,42 @@ float FilterSpeed(float *buf, int *index, float new_val)
 }
 
 // 全局变量，导航传下来的速度（由navigation模块或者上位机赋值）
-volatile float nav_linear_velocity = 2.0f;   // m/s
+volatile float nav_linear_velocity = 0.2f;   // m/s least boom up 0.16
 volatile float nav_angular_velocity = 0.0f; // rad/s
 volatile float filtered_speed_left;
 volatile float filtered_speed_right;
+
+extern volatile uint8_t fan_enabled;
+extern volatile uint8_t brush_enabled;
+extern volatile uint8_t pump_enabled;
+
 	int temp=0;
 	void uart2_rx_callback(uint8_t *buf, uint16_t len)
 {
     for (int i = 0; i < len; i++)
     {
+				char msg[50];  // 存放打印信息
         switch (buf[i])
         {
             case '1': temp = 1; break; // 前进
             case '2': temp = 2; break; // 后退
             case '3': temp = 3; break; // 左转
             case '4': temp = 4; break; // 右转
+					
+            case 'a': fan_enabled = 1; break;
+            case 'x': fan_enabled = 0; break;
+
+            case 'b': brush_enabled = 1; break;
+            case 'y': brush_enabled = 0; break;
+
+            case 'c': pump_enabled = 1; break;
+            case 'z': pump_enabled = 0; break;
+					
+					  case '8': control_mode = 0; break; // 切换到手动模式
+            case '9': control_mode = 1; break; // 切换回自动模式
             default: break;
         }
+				HAL_UART_Transmit(&huart2, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
     }
 }
 
@@ -78,8 +100,8 @@ volatile float filtered_speed_right;
   {
       Motor_Init();
 		
-		  PID_Init(&pid_left, 20.0f, 0.5f, 0.1f, 0.0f, 100.0f);
-      PID_Init(&pid_right, 20.0f, 0.5f, 0.1f, 0.0f, 100.0f);
+		  PID_Init(&pid_left, 20.0f, 1.5f, 0.1f, 0.0f, 100.0f);
+      PID_Init(&pid_right, 20.0f, 1.5f, 0.1f, 0.0f, 100.0f);
 		  uint32_t last_tick = osKernelSysTick();
 //		int autonav=1;
       //Motor_SetSpeed(80);  // 默认设置速度为 80% 
@@ -94,6 +116,8 @@ volatile float filtered_speed_right;
         if (dt >= (CONTROL_PERIOD_MS / 1000.0f))
         {
             last_tick = current_tick;
+					 if (control_mode == 1)  // 自动导航模式
+					{
             // 读取导航速度指令（可能为负）
             v = nav_linear_velocity;      // m/s，允许正负
             w = nav_angular_velocity;     // rad/s，允许正负
@@ -164,30 +188,32 @@ volatile float filtered_speed_right;
             Motor_Right_SetDirection((v_right > 0) ? 1 : ((v_right < 0) ? -1 : 0));
 
 					}
-//				else{
-//				//客户端控制
-//				int command = temp;
-//				temp=0;
-//				 switch (command)
-//				 {
-//            case 1:
-//                Motor_Forward();
-//						// osDelay(5000);
-//                break;
-//						
-//            case 2:
-//                Motor_Backward();
-//                break;
-//            case 3:
-//                Motor_TurnLeft();//left
-//                break;
-//            case 4:
-//                Motor_TurnRight();//right
-//                break;
-//            default:
-//                Motor_Stop();
-//                break;
-//        }
+				
+				else{
+				//客户端控制
+				int command = temp;
+				temp=0;
+				 switch (command)
+				 {
+            case 1:
+                Motor_Forward();
+						// osDelay(5000);
+                break;
+						
+            case 2:
+                Motor_Backward();
+                break;
+            case 3:
+                Motor_TurnLeft();//left
+                break;
+            case 4:
+                Motor_TurnRight();//right
+                break;
+            default:
+                Motor_Stop();
+                break;
+        }
+			}	 
 			//}
 //          // 示例操作逻辑（可根据需要替换为实际控制逻辑）
 //          Motor_SoftStart(80, 1000);   // 平滑启动到80%速度
@@ -202,6 +228,7 @@ volatile float filtered_speed_right;
 //          osDelay(2000);
 //  
 //          Motor_Stop();               // 停止
-          osDelay(100);
+			}
+          osDelay(50);
       }
   }
