@@ -33,57 +33,57 @@ GPIO_PinState IR_CC_R1_Read(void)
 }
 void Crash_Task(void const * argument)
 {
-		static uint32_t last_escape_time = 0;
+//		static uint32_t last_escape_time = 0;
     for(;;)
     {
-        GPIO_PinState sd_state = IR_SD_Read();
-        GPIO_PinState bt_state = IR_BT_R_Read();
-				GPIO_PinState ccr1_state = IR_CC_R1_Read();
-        if(sd_state == GPIO_PIN_RESET)
-            IR_SD_FallFlag = 1;   // 跌落检测到 side 可以避障 1是正常 0是有东西
-        else
-            IR_SD_FallFlag = 0;   // 
+//        GPIO_PinState sd_state = IR_SD_Read();
+//        GPIO_PinState bt_state = IR_BT_R_Read();
+//				GPIO_PinState ccr1_state = IR_CC_R1_Read();
+//        if(sd_state == GPIO_PIN_RESET)
+//            IR_SD_FallFlag = 1;   // 跌落检测到 side 可以避障 1是正常 0是有东西
+//        else
+//            IR_SD_FallFlag = 0;   // 
 
-        if(bt_state == GPIO_PIN_RESET)
-            IR_BT_R_FallFlag = 1;// 0正常 1是底下高 防跌落
-        else
-            IR_BT_R_FallFlag = 0;
+//        if(bt_state == GPIO_PIN_RESET)
+//            IR_BT_R_FallFlag = 1;// 0正常 1是底下高 防跌落
+//        else
+//            IR_BT_R_FallFlag = 0;
 
-				if(ccr1_state == GPIO_PIN_RESET)
-            IR_CC_R1_FallFlag = 1;//没有用
-        else
-						IR_CC_R1_FallFlag = 0;	
-				IR_BT_F_Flag   = (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4)  == GPIO_PIN_RESET) ? 1 : 0;//0正常 1是底下高 防跌落
-        IR_BT_L_Flag   = (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5)  == GPIO_PIN_RESET) ? 1 : 0;
-				
-				IRHIT_L_Flag = (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12) == GPIO_PIN_SET) ? 1 : 0;//0正常 1碰撞
-				IRHIT_R_Flag = (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_15) == GPIO_PIN_SET) ? 1 : 0;
-				
-				 uint32_t now = HAL_GetTick();
-        if (
-            (IR_SD_FallFlag == 0) || 
-            (IR_BT_R_FallFlag == 1) || 
-            (IR_BT_F_Flag == 1) || 
-         
-            (IRHIT_L_Flag == 1) || 
-            (IRHIT_R_Flag == 1)
-        )
-				{
-            if (now - last_escape_time > 2000) // 避免短时间内重复后退
-            {
-                last_escape_time = now;
+//				if(ccr1_state == GPIO_PIN_RESET)
+//            IR_CC_R1_FallFlag = 1;//没有用
+//        else
+//						IR_CC_R1_FallFlag = 0;	
+//				IR_BT_F_Flag   = (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4)  == GPIO_PIN_RESET) ? 1 : 0;//0正常 1是底下高 防跌落
+//        IR_BT_L_Flag   = (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5)  == GPIO_PIN_RESET) ? 1 : 0;
+//				
+//				IRHIT_L_Flag = (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12) == GPIO_PIN_SET) ? 1 : 0;//0正常 1碰撞
+//				IRHIT_R_Flag = (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_15) == GPIO_PIN_SET) ? 1 : 0;
+//				
+//				 uint32_t now = HAL_GetTick();
+//        if (
+//            (IR_SD_FallFlag == 0) || 
+//            (IR_BT_R_FallFlag == 1) || 
+//            (IR_BT_F_Flag == 1) || 
+//         
+//            (IRHIT_L_Flag == 1) || 
+//            (IRHIT_R_Flag == 1)
+//        )
+//				{
+//            if (now - last_escape_time > 2000) // 避免短时间内重复后退
+//            {
+//                last_escape_time = now;
 
-                printf("避障触发，执行后退...\n");
+//                printf("避障触发，执行后退...\n");
 
-                Motor_Backward();
-                Motor_SetSpeed(60, 60);
-                osDelay(1000);  // 后退时间
+//                Motor_Backward();
+//                Motor_SetSpeed(60, 60);
+//                osDelay(1000);  // 后退时间
 
-                Motor_Stop();
-//                PID_Reset(&pid_left);
-//                PID_Reset(&pid_right);
-            }
-					}
+//                Motor_Stop();
+////                PID_Reset(&pid_left);
+////                PID_Reset(&pid_right);
+//            }
+//					}
         osDelay(10);
     }
 }

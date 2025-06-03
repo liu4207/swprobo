@@ -56,7 +56,7 @@ float FilterSpeed(float *buf, int *index, float new_val)
 }
 
 // 全局变量，导航传下来的速度（由navigation模块或者上位机赋值）
-volatile float nav_linear_velocity = 0.2f;   // m/s least boom up 0.16
+volatile float nav_linear_velocity = 0.16f;   // m/s least boom up 0.16
 volatile float nav_angular_velocity = 0.0f; // rad/s
 volatile float filtered_speed_left;
 volatile float filtered_speed_right;
@@ -70,7 +70,22 @@ extern volatile uint8_t pump_enabled;
 {
     for (int i = 0; i < len; i++)
     {
-				char msg[50];  // 存放打印信息
+			char cmd_line[64] = {0};
+
+			if (len >= sizeof(cmd_line)) len = sizeof(cmd_line) - 1;
+			memcpy(cmd_line, buf, len);
+			cmd_line[len] = '\0';  // 确保是字符串结束
+
+			float v = 0.0f, w = 0.0f;
+
+			// 解析格式：#V+0.22,A-0.13\n
+			if (sscanf(cmd_line, "#V%f,A%f", &v, &w) == 2)
+			{
+					nav_linear_velocity = 1.9*v;
+					nav_angular_velocity = 1.9*w;
+					control_mode = 1;  // 自动模式
+					return;
+			}
         switch (buf[i])
         {
             case '1': temp = 1; break; // 前进
@@ -91,7 +106,7 @@ extern volatile uint8_t pump_enabled;
             case '9': control_mode = 1; break; // 切换回自动模式
             default: break;
         }
-				HAL_UART_Transmit(&huart2, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
+				//HAL_UART_Transmit(&huart2, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
     }
 }
 
@@ -193,6 +208,7 @@ extern volatile uint8_t pump_enabled;
 				//客户端控制
 				int command = temp;
 				temp=0;
+					Motor_SetSpeed(60,60); 
 				 switch (command)
 				 {
             case 1:
@@ -204,9 +220,11 @@ extern volatile uint8_t pump_enabled;
                 Motor_Backward();
                 break;
             case 3:
+								Motor_SetSpeed(50,50); 
                 Motor_TurnLeft();//left
                 break;
             case 4:
+							  Motor_SetSpeed(50,50); 
                 Motor_TurnRight();//right
                 break;
             default:
