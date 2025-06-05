@@ -41,8 +41,9 @@ source install/setup.bash
 
 ```bash
 ros2 launch ydlidar_ros2_driver x3_ydlidar_launch.py #也可以改为你对应的雷达 调整参数即可
-## 📦 依赖组件
 ``` 
+## 📦 依赖组件
+
 - [YDLidar ROS2 驱动](https://github.com/YDLIDAR/ydlidar_ros2_driver)
 
 安装方式：
