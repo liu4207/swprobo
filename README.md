@@ -30,7 +30,7 @@
 cd ~/ros2_ws
 colcon build --packages-select ydlidar_ros2_driver
 source install/setup.bash
----
+``` 
 ###2. 注意事项
 
 那个文件要单独拉出来放在ros工作区间
@@ -42,7 +42,7 @@ source install/setup.bash
 ```bash
 ros2 launch ydlidar_ros2_driver x3_ydlidar_launch.py #也可以改为你对应的雷达 调整参数即可
 ## 📦 依赖组件
----
+``` 
 - [YDLidar ROS2 驱动](https://github.com/YDLIDAR/ydlidar_ros2_driver)
 
 安装方式：
