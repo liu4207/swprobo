@@ -1,6 +1,19 @@
-ls-files MDK-ARM/.uvprojx
-ls-files MDK-ARM/.uvoptx
-ls-files MDK-ARM/.c
-ls-files MDK-ARM/.h
-ls-files MDK-ARM/.s
-ls-files MDK-ARM/.lst
+# Keil 工程临时文件
+*.uvgui.*
+*.uvoptx
+*.bak
+*.dep
+*.hex
+*.exe
+*.lst
+*.plg
+*.map
+*.axf
+*.o
+*.crf
+*.htm
+*.log
+*.sct
+*.d
+
+
