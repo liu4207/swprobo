@@ -295,15 +295,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
-/* DMA����ʾ������ */
+/* DMA*/
 void uart2_dma_send(const char *buf, uint16_t len)
 {
-    // ʹ��HAL�������DMA����
-    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)buf, len);
+    // ʹHAL DMA
+    HAL_UART_Transmit(&huart2, (uint8_t *)buf, len,0xff);
 }
 void USART2_UART_StartDMA(void)
 {
     HAL_UART_Receive_DMA(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
-    __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);  // ���������ж�
+    __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); 
 }
 /* USER CODE END 1 */

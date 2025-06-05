@@ -41,12 +41,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-//osMessageQId uart2_tx_queue;
-//#define UART_TX_BUF_LEN 128
-//#define UART_QUEUE_LEN 10
-//osMessageQId uartQueueHandle;
-//QueueHandle_t uartQueueHandle;
-//uint8_t uart_tx_buf_pool[UART_QUEUE_LEN][UART_TX_BUF_LEN];
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -77,7 +72,7 @@ volatile float motor_speed_rps_ch2 = 0.0f;
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
-int fputc(int ch, FILE *f)
+int fputc(int ch, FILE *f)//重构函数
 {
     HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
     return ch;
@@ -126,20 +121,12 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-//	atk_ms601m_uart_init();  
-	//Motor_Init();  // 
-//	  Left_Brush_Init();
-//  Right_Brush_Init();
-//  Pump_Init();
-//	Fan_Init();
 	printf("init complete\n");
-//	IMU_Init(&huart1);
-	
-	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
-HAL_GPIO_WritePin(user_led_GPIO_Port, user_led_Pin, GPIO_PIN_SET); 
 
-USART2_UART_StartDMA();  // ����DMA����
-// 启动输入捕获中断
+	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+	HAL_GPIO_WritePin(user_led_GPIO_Port, user_led_Pin, GPIO_PIN_SET); 
+	USART2_UART_StartDMA();  // ����DMA����
+	// 启动输入捕获中断
     HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);//左侧
 		HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);//右侧
   /* USER CODE END 2 */
@@ -154,44 +141,9 @@ USART2_UART_StartDMA();  // ����DMA����
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-		int counter = 0; // 
-//		IMU_Data_t imu_data = {0};
 
   while (1)
   {
-//		IMU_Process();
-//		IMU_GetData(&imu_data);
-
-//	
-		demo_run(); 
-//		 Turn_On_Left_Brush();
-//    Turn_On_Right_Brush();
-//		 Turn_On_Pump();
-//		Fan_TurnOff();
-
- //   HAL_Delay(2000);
-		 //Motor_Brake();
-		 //   HAL_Delay(2000);
-		
-		printf("Number: %d\n", counter++); // ����
-    HAL_Delay(1000); //
-		HAL_GPIO_TogglePin(user_led_GPIO_Port, user_led_Pin); // LED
-//		 Motor_Forward();  // 
-//     Motor_SetSpeed(50);  //
-//     HAL_Delay(2000);  // 
-//    Fan_TurnOn();
-//		HAL_Delay(800);
-		
-
-//     Motor_Stop();  // ֹͣ���
-//     HAL_Delay(1000);  // ͣ��1��
-
-//     Motor_Backward();  // �����ת
-//     Motor_SetSpeed(30);  // ���õ���ٶ�Ϊ30%
-//     HAL_Delay(2000);  // ����2��
-
-//     Motor_Stop();  // ֹͣ���
-//     HAL_Delay(1000);  // ͣ��1��
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

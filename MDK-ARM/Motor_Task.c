@@ -15,7 +15,8 @@
 #define SPEED_PULSE_INTERVAL_MAX 2000000
 #define PWM_DEADBAND 20  // PWM最低有效门槛，低于此值电机不转
 #define SPEED_STOP_THRESHOLD 0.01f  // 速度低于该值认为停止
-volatile int control_mode = 1;  // 1: 自动模式；0: 手动模式
+volatile int control_mode = 0;  // 1: 自动模式；0: 手动模式
+volatile uint8_t motor_locked = 0;  // 0 正常，1 避障控制中 和crashtask 抢夺优先级
 
 volatile int32_t encoder_left_pulse_count = 0;
 volatile int32_t encoder_right_pulse_count = 0;
@@ -27,19 +28,18 @@ float right_distance = 0;
 float linear_velocity=0;
 float angular_velocity_z=0;
 
-  extern void Motor_Init(void);
-  extern void Motor_Forward(void);
-  extern void Motor_Backward(void);
-  extern void Motor_Stop(void);
-  extern void Motor_SetSpeed(uint8_t speed1,uint8_t speed2);
-  extern void Motor_SoftStart(uint8_t target_speed, uint16_t duration);
-  extern void Motor_Brake(void);
-  static PID_HandleTypeDef pid_left;
+extern void Motor_Init(void);
+extern void Motor_Forward(void);
+extern void Motor_Backward(void);
+extern void Motor_Stop(void);
+extern void Motor_SetSpeed(uint8_t speed1,uint8_t speed2);
+extern void Motor_SoftStart(uint8_t target_speed, uint16_t duration);
+extern void Motor_Brake(void);
+static PID_HandleTypeDef pid_left;
 static PID_HandleTypeDef pid_right;
 
 volatile float pwm_left=0,pwm_right=0,speed_left=0,speed_right=0,target_speed_rps=0,target_linear_speed=0,v,w,v_left,v_right,target_rps_left,target_rps_right;
-	
-	#define FILTER_LEN 5
+#define FILTER_LEN 5
 float speed_left_buf[FILTER_LEN] = {0};
 float speed_right_buf[FILTER_LEN] = {0};
 int filter_index_left = 0;
@@ -56,7 +56,7 @@ float FilterSpeed(float *buf, int *index, float new_val)
 }
 
 // 全局变量，导航传下来的速度（由navigation模块或者上位机赋值）
-volatile float nav_linear_velocity = 0.16f;   // m/s least boom up 0.16
+volatile float nav_linear_velocity = 0.0f;   // m/s least boom up 0.16
 volatile float nav_angular_velocity = 0.0f; // rad/s
 volatile float filtered_speed_left;
 volatile float filtered_speed_right;
@@ -64,9 +64,8 @@ volatile float filtered_speed_right;
 extern volatile uint8_t fan_enabled;
 extern volatile uint8_t brush_enabled;
 extern volatile uint8_t pump_enabled;
-
-	int temp=0;
-	void uart2_rx_callback(uint8_t *buf, uint16_t len)
+int temp=0;
+void uart2_rx_callback(uint8_t *buf, uint16_t len)
 {
     for (int i = 0; i < len; i++)
     {
@@ -81,8 +80,8 @@ extern volatile uint8_t pump_enabled;
 			// 解析格式：#V+0.22,A-0.13\n
 			if (sscanf(cmd_line, "#V%f,A%f", &v, &w) == 2)
 			{
-					nav_linear_velocity = 1.9*v;
-					nav_angular_velocity = 1.9*w;
+					nav_linear_velocity = 3.0f*v;
+					nav_angular_velocity = 3.0f*w;
 					control_mode = 1;  // 自动模式
 					return;
 			}
@@ -115,14 +114,16 @@ extern volatile uint8_t pump_enabled;
   {
       Motor_Init();
 		
-		  PID_Init(&pid_left, 20.0f, 1.5f, 0.1f, 0.0f, 100.0f);
-      PID_Init(&pid_right, 20.0f, 1.5f, 0.1f, 0.0f, 100.0f);
+		  PID_Init(&pid_left, 50.0f, 1.5f, 0.1f, 0.0f, 100.0f);
+      PID_Init(&pid_right, 45.0f, 1.5f, 0.1f, 0.0f, 100.0f);
 		  uint32_t last_tick = osKernelSysTick();
-//		int autonav=1;
-      //Motor_SetSpeed(80);  // 默认设置速度为 80% 
       /* 电机任务主循环 */
       while(1)
       {
+				if (motor_locked) {
+					osDelay(50);
+					continue;  // 当前有更高优先级控制，跳过
+				}
 				uint32_t current_tick = osKernelSysTick();
 				// 计算时间间隔，防止溢出安全计算
         uint32_t delta_tick = current_tick - last_tick;
@@ -159,14 +160,14 @@ extern volatile uint8_t pump_enabled;
             //float speed_left = 0.0f, speed_right = 0.0f;
             if (pulse_interval_ch1 < SPEED_PULSE_INTERVAL_MAX)//如果编码器读数值正常  开始按照指定速度转
                 speed_left = motor_speed_rps_ch1;//保存**“实际”**的左轮转速反馈 在闭环控制里用它来告诉 PID 控制器
-						 else {
-						speed_left = 0.0f;  // 无脉冲时，实际速度应该是 0
-						}
+						else 
+								speed_left = 0.0f;  // 无脉冲时，实际速度应该是 0
+						
             if (pulse_interval_ch2 < SPEED_PULSE_INTERVAL_MAX)//如果超过最高值 就意味着 编码器没在出脉冲，可能轮子停了或者传感器读不到
                 speed_right = motor_speed_rps_ch2;
-						 else {
-						speed_right = 0.0f;  // 无脉冲时，实际速度应该是 0
-						}
+						 else 
+								speed_right = 0.0f;  // 无脉冲时，实际速度应该是 0
+						
 						
 
             // 对速度做滤波处理
@@ -232,21 +233,7 @@ extern volatile uint8_t pump_enabled;
                 break;
         }
 			}	 
-			//}
-//          // 示例操作逻辑（可根据需要替换为实际控制逻辑）
-//          Motor_SoftStart(80, 1000);   // 平滑启动到80%速度
-//          Motor_Forward();            // 向前运行
-//          osDelay(2000);              // 保持运行2秒
-//  
-//          Motor_Brake();              // 快速刹车
-//          osDelay(500);
-//  
-//          Motor_Backward();           // 反转
-//          Motor_SetSpeed(60);         // 设置速度为60%
-//          osDelay(2000);
-//  
-//          Motor_Stop();               // 停止
-			}
-          osDelay(50);
-      }
+		}
+    osDelay(50);
+   }
   }
