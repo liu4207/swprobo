@@ -48,6 +48,15 @@ STM32 + FreeRTOS 差速小车底盘驱动系统，支持 ROS2 上位机 `cmd_vel
 ## 📸 效果展示
 > （可放图 / 视频 / GIF / ROS 上位机截图）
 
+### 🧩 查看硬件设计文件
+
+本项目硬件部分请见 [hardware 分支](https://github.com/liu4207/swprobo/tree/hardware)，包含：
+
+- 原理图（PDF）
+- PCB（PDF）
+- Gerber 文件（可生产）
+- BOM / 坐标文件
+  
 ## 👨‍💻 作者
 刘珅凯 @ 重庆大学明月班  
 联系：2323453274@qq.com
