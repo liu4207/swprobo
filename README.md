@@ -31,13 +31,13 @@ cd ~/ros2_ws
 colcon build --packages-select ydlidar_ros2_driver
 source install/setup.bash
 
-2. 注意事项
+###2. 注意事项
 
 那个文件要单独拉出来放在ros工作区间
 然后在执行上述的build
 本次项目使用的x3pro雷达 具体参数在params文件夹里 选用x3的参数即可
 
-3. 启动雷达驱动
+###3. 启动雷达驱动
 
 ```bash
 ros2 launch ydlidar_ros2_driver x3_ydlidar_launch.py #也可以改为你对应的雷达 调整参数即可
