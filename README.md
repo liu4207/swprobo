@@ -41,12 +41,21 @@ STM32 + FreeRTOS 差速小车底盘驱动系统，支持 ROS2 上位机 `cmd_vel
 2. 打开 `MDK-ARM/swprobo.uvprojx` 使用 Keil 编译下载（记得注释掉freertos自动生成的函数 否则会重复定义）
 3. 上位机通过串口发送形如 `#V+0.22,A-0.13\n` 指令进行控制（底盘代码协议是这个 可以自己手动改）
 
+## 🧑‍💻 树莓派代码部分
+请见 [raspi 分支](https://github.com/liu4207/swprobo/tree/raspi)
+- **接收** ROS2 上位机的 `/cmd_vel` 控制指令。
+- **发送** 到 STM32 底盘控制系统。
+- **发布** IMU 和里程计数据，供上位机进行导航和定位。
+
 ## 🖥️ 串口协议（树莓派发下来的）
 格式：#V+线速度,A+角速度\n
 例如：#V+0.20,A-0.10\n
 
 ## 📸 效果展示
 > （可放图 / 视频 / GIF / ROS 上位机截图）
+
+##**上位机部分**
+请见 [ros2_host 分支](https://github.com/liu4207/swprobo/tree/ros2_host)
 
 ### 🧩 查看硬件设计文件
 
