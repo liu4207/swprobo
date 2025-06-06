@@ -1,6 +1,6 @@
 # ROS2 Serial Bridge
 
-本项目是一个 ROS 2 节点，用于通过串口与 STM32 通信，控制机器人运动并发布 IMU 和里程计数据。该节点订阅 `/cmd_vel` 控制指令，发送给 STM32 控制底盘，同时发布 `/imu` 和 `/odom` 数据供上位机或导航使用。
+本项目提供了在 Ubuntu 22.04 上使用 ROS 2 Humble 进行 SLAM 和导航的完整配置 
 
 ## 🧰 前置准备
 
@@ -85,6 +85,6 @@ echo "export ROS_DOMAIN_ID=0" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-
+版权声明： 参考了我同学的课程设计，部分代码由对方完成！！！
 
 
