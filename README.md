@@ -25,7 +25,7 @@ sudo apt update && sudo apt install -y \
 🧱 步骤：安装和使用
 1️⃣ 克隆仓库并编译：
 ```bash
-git clone https://github.com/liu4207/swprobo.git
+git clone -b ros2_host https://github.com/liu4207/swprobo.git
 cd swprobo
 colcon build --symlink-install
 ```
